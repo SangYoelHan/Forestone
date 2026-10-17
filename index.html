@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forestone | 포레스톤 클럽</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Pretendard & Outfit for outdoor editorial feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'sans-serif'],
+            display: ['"Outfit"', '"Noto Sans KR"', 'sans-serif'],
+          },
+          colors: {
+            forest: {
+              50: '#f2f7f4',
+              100: '#e1ede6',
+              200: '#c5dcd0',
+              300: '#9cc2b0',
+              400: '#6ea18b',
+              500: '#4d846d',
+              600: '#396956',
+              700: '#2d5446',
+              800: '#254338',
+              900: '#1b332b',
+              950: '#101f1a',
+            },
+            earth: {
+              50: '#faf8f5',
+              100: '#f3efe6',
+              200: '#e6decb',
+              300: '#d5c5a7',
+              400: '#c2a67d',
+              500: '#b38d5d',
+              600: '#9e754b',
+              700: '#835d3e',
+              800: '#6c4d37',
+              900: '#59402f',
+            },
+            terracotta: {
+              500: '#c86d51',
+              600: '#b2563b',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #f5f2eb;
+      color: #1f2d27;
+      font-family: 'Noto Sans KR', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Subtle topographic pattern overlay */
+    .topo-bg {
+      background-color: #1b332b;
+      background-image: radial-gradient(circle at 20% 20%, rgba(110, 161, 139, 0.16) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 75%, rgba(194, 166, 125, 0.18) 0%, transparent 55%),
+                        repeating-radial-gradient(circle at 10% 90%, transparent 0, transparent 28px, rgba(255,255,255,0.03) 29px, transparent 30px);
+    }
+    .card-shadow {
+      box-shadow: 0 8px 24px -6px rgba(27, 51, 43, 0.07), 0 2px 6px -1px rgba(27, 51, 43, 0.04);
+    }
+    .active-tab-pill {
+      background-color: #1b332b;
+      color: #faf8f5;
+      box-shadow: 0 4px 12px rgba(27, 51, 43, 0.25);
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f3efe6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #9cc2b0;
+      border-radius: 9999px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen pb-24 md:pb-12 selection:bg-forest-700 selection:text-white">
+
+  <!-- Top Brand Header -->
+  <header class="topo-bg text-earth-50 sticky top-0 z-30 border-b border-forest-800/80 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+      <!-- Logo & Club Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-forest-500 to-forest-800 border border-earth-300/30 flex items-center justify-center shadow-inner">
+          <!-- Custom SVG Forest + Stone Icon -->
+          <svg class="w-6 h-6 text-earth-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3L2 15h12L8 3z" />
+            <path d="M15 7l-4.5 9h11L15 7z" />
+            <path d="M4 19h16" />
+            <circle cx="18" cy="4.5" r="1.5" fill="currentColor" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold text-xl tracking-tight text-white">FORESTONE</h1>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-earth-400/20 text-earth-200 border border-earth-300/30">7인 트래킹 클럽</span>
+          </div>
+          <p class="text-xs text-forest-200/90 hidden sm:block">숲과 바위를 걷는 일곱 명의 발걸음 · 매월 3주째 토요일 정기 산행</p>
+        </div>
+      </div>
+
+      <!-- Sync Status & Quick Reset/Info -->
+      <div class="flex items-center gap-2">
+        <div id="syncStatusBadge" class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-forest-900/90 border border-forest-700 text-forest-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="syncStatusText">데이터 동기화됨</span>
+        </div>
+        <button id="openResetModalBtn" title="초기 샘플 데이터로 복원" class="text-xs px-2.5 py-1.5 rounded-lg bg-forest-800/80 hover:bg-forest-700 text-earth-200 border border-forest-700 transition flex items-center gap-1">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span class="hidden sm:inline">초기화</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Tabs -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 hidden md:flex items-center gap-2 pb-3 pt-1">
+      <button data-tab="dashboard" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+        <i class="fa-solid fa-compass"></i> 대시보드 (홈)
+      </button>
+      <button data-tab="voting" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+        <i class="fa-solid fa-check-to-slot"></i> 장소 투표
+        <span id="navVoteCountBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-earth-500/30 text-earth-100">0</span>
+      </button>
+      <button data-tab="archive" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+        <i class="fa-solid fa-mountain-sun"></i> 트래킹 기록
+        <span id="navArchiveCountBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-earth-500/30 text-earth-100">0</span>
+      </button>
+      <button data-tab="members" class="nav-tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+        <i class="fa-solid fa-chart-simple"></i> 멤버 & 통계
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
+
+    <!-- ==================== TAB 1: DASHBOARD ==================== -->
+    <section id="tab-dashboard" class="tab-panel animate-fade-in space-y-6">
+      <!-- Hero Banner: Next 3rd Saturday Auto Calculator & D-Day -->
+      <div class="topo-bg rounded-3xl p-5 sm:p-7 text-white card-shadow relative overflow-hidden border border-forest-800">
+        <!-- Decorative SVG Mountain Silhouette -->
+        <svg class="absolute right-0 bottom-0 w-72 h-40 text-forest-800/35 pointer-events-none" viewBox="0 0 400 180" fill="currentColor">
+          <path d="M0 180 L90 65 L165 135 L260 25 L360 140 L400 95 L400 180 Z" />
+        </svg>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div class="space-y-3">
+            <div class="inline-flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-earth-500 text-white shadow-sm">
+                정기 모임 · 매월 3주째 토요일
+              </span>
+              <span id="ddayBadge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-400 text-forest-950">
+                D-Day 계산중
+              </span>
+              <button id="toggleScheduleMonthBtn" class="text-xs px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-earth-100 transition flex items-center gap-1" title="이번 달 / 다음 달 3주째 토요일 전환">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span id="scheduleMonthToggleLabel">다음 달 일정 보기</span>
+              </button>
+            </div>
+
+            <div>
+              <p class="text-xs text-earth-200 font-medium mb-0.5" id="meetingSequenceSubtitle">다가오는 포레스톤 정기 산행일</p>
+              <h2 id="nextTrekDateDisplay" class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
+                2026년 10월 17일 (토)
+              </h2>
+            </div>
+
+            <p id="nextTrekSubNotice" class="text-xs sm:text-sm text-forest-100/90 max-w-xl">
+              현재 날짜를 기준으로 자동 계산된 매월 3주째 토요일입니다. 아래에서 멤버별 참석 여부를 한 번의 클릭으로 변경해보세요.
+            </p>
+          </div>
+
+          <!-- Quick Attendance Summary Box inside Hero -->
+          <div class="bg-forest-950/65 backdrop-blur-md border border-forest-700/80 rounded-2xl p-4 sm:p-5 min-w-[250px]">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-earth-200">현재 참석 확정 인원</span>
+              <span class="text-xs font-semibold text-emerald-300" id="heroAttendanceRatioText">0 / 7명</span>
+            </div>
+            <div class="flex items-baseline gap-2 mb-3">
+              <span id="heroAttendingCount" class="font-display text-3xl sm:text-4xl font-extrabold text-white">5</span>
+              <span class="text-sm text-forest-200">명 참석 예정</span>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full h-2.5 bg-forest-900 rounded-full overflow-hidden flex">
+              <div id="barAttend" class="bg-emerald-400 h-full transition-all duration-300" style="width: 70%"></div>
+              <div id="barUndecided" class="bg-amber-400 h-full transition-all duration-300" style="width: 15%"></div>
+              <div id="barAbsent" class="bg-rose-400 h-full transition-all duration-300" style="width: 15%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-forest-200 mt-2">
+              <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[7px] text-emerald-400"></i> 참석 <b id="summaryAttendNum">0</b></span>
+              <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[7px] text-amber-400"></i> 미정 <b id="summaryUndecidedNum">0</b></span>
+              <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[7px] text-rose-400"></i> 불참 <b id="summaryAbsentNum">0</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirmed Monthly Trek Info + Member Attendance Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 5 cols: This Month's Confirmed Place, Time, Supplies -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center">
+                  <i class="fa-solid fa-location-dot"></i>
+                </span>
+                <div>
+                  <h3 class="font-bold text-base text-forest-950">이달의 확정 산행지</h3>
+                  <p class="text-xs text-stone-500">장소 투표 탭에서 확정하거나 직접 수정할 수 있습니다</p>
+                </div>
+              </div>
+              <button id="openEditPlanModalBtn" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-earth-100 hover:bg-earth-200 text-earth-800 transition flex items-center gap-1">
+                <i class="fa-solid fa-pen"></i> 공지 수정
+              </button>
+            </div>
+
+            <!-- Place Badge Box -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-forest-50 to-earth-100/60 border border-forest-200/70 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span id="confirmedDifficultyBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-forest-800 text-white">난이도 중</span>
+                <span id="confirmedDurationText" class="text-xs font-semibold text-forest-800"><i class="fa-regular fa-clock mr-1"></i>약 4시간 30분</span>
+              </div>
+              <h4 id="confirmedPlaceTitle" class="text-xl font-extrabold text-forest-950 leading-snug">
+                북한산 백운대 숨은벽 능선 코스
+              </h4>
+              <p id="confirmedPlaceDesc" class="text-xs text-stone-600 leading-relaxed">
+                밤골탐방지원센터에서 출발해 숨은벽 능선 조망을 즐기고 백운대 정상 인증 후 우이동으로 하산하는 가을 대표 암릉 코스입니다.
+              </p>
+            </div>
+
+            <!-- Meeting Time & Supplies List -->
+            <div class="space-y-3 pt-1">
+              <div class="flex items-start gap-3 p-3 rounded-2xl bg-earth-50 border border-earth-200/70">
+                <div class="w-8 h-8 rounded-xl bg-earth-200/80 text-earth-800 flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-regular fa-clock"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-stone-500">집결 시간 및 장소</p>
+                  <p id="confirmedMeetingTime" class="text-sm font-bold text-forest-950 mt-0.5">
+                    오전 08:30 · 우이신설선 북한산우이역 2번 출구 앞
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 p-3 rounded-2xl bg-earth-50 border border-earth-200/70">
+                <div class="w-8 h-8 rounded-xl bg-earth-200/80 text-earth-800 flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-person-hiking"></i>
+                </div>
+                <div class="flex-1">
+                  <p class="text-xs font-semibold text-stone-500">필수 준비물</p>
+                  <div id="confirmedSuppliesTags" class="flex flex-wrap gap-1.5 mt-1.5">
+                    <!-- Dynamic supply tags -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shortcut to Archive or Voting -->
+          <div class="pt-3 border-t border-earth-200 flex items-center justify-between gap-2">
+            <button data-goto-tab="voting" class="quick-tab-link text-xs font-semibold text-forest-700 hover:text-forest-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-check-to-slot"></i> 다른 후보지 투표 보러가기 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+            <button id="completeTrekToArchiveBtn" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-white transition flex items-center gap-1.5">
+              <i class="fa-solid fa-flag-checkered"></i> 산행 완료 기록하기
+            </button>
+          </div>
+        </div>
+
+        <!-- Right 7 cols: 7 Members One-Click Attendance Toggle -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center">
+                  <i class="fa-solid fa-users-viewfinder"></i>
+                </span>
+                <div>
+                  <h3 class="font-bold text-base text-forest-950">7인 멤버 참석 여부 체크</h3>
+                  <p class="text-xs text-stone-500">멤버 카드를 클릭하면 <span class="font-semibold text-emerald-700">참석</span> → <span class="font-semibold text-rose-600">불참</span> → <span class="font-semibold text-amber-600">미정</span> 순으로 즉시 전환됩니다</p>
+                </div>
+              </div>
+
+              <!-- Quick Bulk Action -->
+              <div class="flex items-center gap-1.5">
+                <button id="markAllAttendBtn" class="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition">
+                  전원 참석
+                </button>
+                <button id="markAllUndecidedBtn" class="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition">
+                  전원 미정
+                </button>
+              </div>
+            </div>
+
+            <!-- 7 Member Cards List -->
+            <div id="dashboardAttendanceGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3.5 border-t border-earth-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
+            <span><i class="fa-regular fa-lightbulb text-amber-500 mr-1"></i>팁: 멤버 이름 변경은 <b>[멤버 & 통계]</b> 탭에서 언제든 수정 가능합니다.</span>
+            <span id="dashboardAttendingNamesPreview" class="font-medium text-forest-800"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: PLACE VOTING ==================== -->
+    <section id="tab-voting" class="tab-panel hidden animate-fade-in space-y-6">
+      <!-- Top Bar: Active Voter Selector + Explanation -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-forest-700">Next Trail Poll</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-forest-950 mt-0.5">다음 산행 후보지 투표</h2>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">
+              가고 싶은 산행 코스를 등록하고 멤버별로 투표하세요. 가장 많은 표를 받은 곳을 <b>이달의 장소로 즉시 확정</b>할 수 있습니다.
+            </p>
+          </div>
+
+          <!-- Active Voter Selector Box -->
+          <div class="bg-forest-50 border border-forest-200 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center gap-2.5 shrink-0">
+            <div class="flex items-center gap-2 text-xs font-bold text-forest-900">
+              <i class="fa-solid fa-user-check text-forest-700"></i>
+              <span>현재 투표하는 멤버:</span>
+            </div>
+            <select id="activeVoterSelect" class="text-sm font-bold bg-white text-forest-950 px-3 py-2 rounded-xl border border-forest-300 focus:outline-none focus:ring-2 focus:ring-forest-600">
+              <!-- Populated with 7 members -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 4 cols: Add New Candidate Place Form -->
+        <div class="lg:col-span-4">
+          <form id="addCandidateForm" class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 space-y-4 sticky top-28">
+            <div class="flex items-center gap-2 pb-1 border-b border-earth-100">
+              <span class="w-8 h-8 rounded-xl bg-earth-100 text-earth-800 flex items-center justify-center">
+                <i class="fa-solid fa-map-location-dot"></i>
+              </span>
+              <div>
+                <h3 class="font-bold text-base text-forest-950">새 트래킹 후보지 등록</h3>
+                <p class="text-[11px] text-stone-500">추천하고 싶은 산과 코스를 적어주세요</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">산 / 코스 이름 <span class="text-rose-500">*</span></label>
+              <input id="candNameInput" type="text" required placeholder="예: 설악산 울산바위 코스" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-stone-700 mb-1">난이도</label>
+                <select id="candDiffInput" class="w-full px-3 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white">
+                  <option value="하">하 (가벼운 힐링)</option>
+                  <option value="중" selected>중 (적당한 능선)</option>
+                  <option value="상">상 (도전적인 종주)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-stone-700 mb-1">예상 소요시간 <span class="text-rose-500">*</span></label>
+                <input id="candDurationInput" type="text" required placeholder="예: 약 4시간" class="w-full px-3 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">간단 코스 설명 <span class="text-rose-500">*</span></label>
+              <textarea id="candDescInput" rows="3" required placeholder="조망 포인트, 들머리/날머리, 계절 매력 포인트 등을 간단히 적어주세요." class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-plus"></i> 후보지 등록하기
+            </button>
+          </form>
+        </div>
+
+        <!-- Right 8 cols: Candidate Cards & Top Place Confirmation -->
+        <div class="lg:col-span-8 space-y-4">
+          <!-- Top-Voted Confirmation Banner -->
+          <div class="bg-gradient-to-r from-forest-900 via-forest-800 to-earth-800 text-white rounded-3xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-400 text-forest-950">최다 득표 1위</span>
+                <span id="topVotedCandidateTitle" class="font-bold text-base sm:text-lg text-white">집계중...</span>
+              </div>
+              <p class="text-xs text-forest-100">
+                현재 가장 많은 표를 받은 후보지를 클릭 한 번으로 홈 대시보드의 '이달의 확정 장소'로 반영합니다.
+              </p>
+            </div>
+            <button id="confirmTopCandidateBtn" class="shrink-0 px-4 py-2.5 rounded-xl bg-earth-400 hover:bg-earth-300 text-forest-950 font-extrabold text-xs sm:text-sm transition shadow-sm flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-award"></i> 최다 득표지를 이달의 장소로 확정
+            </button>
+          </div>
+
+          <!-- Candidate Cards Container -->
+          <div id="candidateCardsList" class="space-y-3.5">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: TREKKING ARCHIVE ==================== -->
+    <section id="tab-archive" class="tab-panel hidden animate-fade-in space-y-6">
+      <!-- Archive Header Banner -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-forest-700">Forestone Footprints</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-forest-950 mt-0.5">포레스톤 트래킹 아카이브</h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-1">
+            우리가 함께 오른 산과 걸은 거리, 하산 후 맛집과 한줄평까지 모두 기록됩니다. 기록 추가 시 멤버 출석률이 자동 반영됩니다.
+          </p>
+        </div>
+        <button id="toggleNewArchiveFormBtn" class="shrink-0 px-4 py-2.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm shadow-sm transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> 새 트래킹 기록 추가
+        </button>
+      </div>
+
+      <!-- Collapsible New Archive Record Form -->
+      <div id="newArchiveFormContainer" class="hidden bg-white rounded-3xl p-5 sm:p-6 card-shadow border-2 border-forest-600/30 space-y-5">
+        <div class="flex items-center justify-between border-b border-earth-200 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center">
+              <i class="fa-solid fa-feather-pointed"></i>
+            </span>
+            <h3 class="font-bold text-base text-forest-950">새 산행 아카이브 작성</h3>
+          </div>
+          <button id="closeNewArchiveFormBtn" type="button" class="text-stone-400 hover:text-stone-700 text-sm px-2 py-1">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <form id="addArchiveForm" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">산행 날짜 <span class="text-rose-500">*</span></label>
+              <input id="archDateInput" type="date" required class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">산행 장소 (산/코스명) <span class="text-rose-500">*</span></label>
+              <input id="archPlaceInput" type="text" required placeholder="예: 팔공산 비로봉 종주" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">걸은 거리 (km) <span class="text-rose-500">*</span></label>
+              <input id="archDistanceInput" type="number" step="0.1" min="0.5" max="100" required placeholder="예: 11.4" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            </div>
+          </div>
+
+          <!-- Participating Members Checkboxes -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold text-stone-700">참석 멤버 체크 (출석 통계에 자동 반영) <span class="text-rose-500">*</span></label>
+              <button type="button" id="archSelectAllMembersBtn" class="text-xs font-semibold text-forest-700 hover:underline">전체 선택/해제</button>
+            </div>
+            <div id="archMembersCheckboxGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+              <!-- Populated dynamically with 7 member checkboxes -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">뒷풀이 맛집 <span class="text-rose-500">*</span></label>
+              <input id="archRestaurantInput" type="text" required placeholder="예: 산골참숯오리백숙 & 도토리묵" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">대표 한줄평 <span class="text-rose-500">*</span></label>
+              <input id="archReviewInput" type="text" required placeholder="예: 정상 운해가 예술이었고 하산 후 파전이 최고였던 날!" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button type="button" id="cancelArchiveFormBtn" class="px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-sm transition">
+              취소
+            </button>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm shadow-md transition flex items-center gap-1.5">
+              <i class="fa-solid fa-check"></i> 기록 저장하기
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Timeline Archive List -->
+      <div id="archiveTimelineList" class="space-y-4">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: MEMBERS & STATS ==================== -->
+    <section id="tab-members" class="tab-panel hidden animate-fade-in space-y-6">
+      <!-- Top Summary Metrics Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-3xl p-5 card-shadow border border-earth-200/80">
+          <div class="flex items-center justify-between text-forest-700 mb-2">
+            <span class="text-xs font-bold">총 트래킹 횟수</span>
+            <i class="fa-solid fa-flag text-sm"></i>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statTotalTreks" class="font-display text-3xl font-extrabold text-forest-950">0</span>
+            <span class="text-xs font-semibold text-stone-500">회 완주</span>
+          </div>
+          <p class="text-[11px] text-stone-500 mt-1">아카이브 누적 기록 기준</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-5 card-shadow border border-earth-200/80">
+          <div class="flex items-center justify-between text-earth-700 mb-2">
+            <span class="text-xs font-bold">누적 걸은 거리</span>
+            <i class="fa-solid fa-route text-sm"></i>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statTotalDistance" class="font-display text-3xl font-extrabold text-forest-950">0.0</span>
+            <span class="text-xs font-semibold text-stone-500">km</span>
+          </div>
+          <p id="statAvgDistanceSub" class="text-[11px] text-stone-500 mt-1">회당 평균 0.0 km</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-5 card-shadow border border-earth-200/80">
+          <div class="flex items-center justify-between text-emerald-700 mb-2">
+            <span class="text-xs font-bold">평균 멤버 출석률</span>
+            <i class="fa-solid fa-user-group text-sm"></i>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statAvgAttendanceRate" class="font-display text-3xl font-extrabold text-forest-950">0</span>
+            <span class="text-xs font-semibold text-stone-500">%</span>
+          </div>
+          <p class="text-[11px] text-stone-500 mt-1">7인 전체 누적 참여율</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-5 card-shadow border border-earth-200/80">
+          <div class="flex items-center justify-between text-amber-600 mb-2">
+            <span class="text-xs font-bold">최다 출석 MVP</span>
+            <i class="fa-solid fa-crown text-sm"></i>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statMvpMemberName" class="text-xl sm:text-2xl font-extrabold text-forest-950 truncate">-</span>
+          </div>
+          <p id="statMvpSubtext" class="text-[11px] text-stone-500 mt-1">산행 열정 1위 멤버</p>
+        </div>
+      </div>
+
+      <!-- Ranking Board & Member Name Editor -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 cols: Attendance Ranking Board -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+                <i class="fa-solid fa-trophy"></i>
+              </span>
+              <div>
+                <h3 class="font-bold text-base text-forest-950">Forestone 출석 랭킹 보드</h3>
+                <p class="text-xs text-stone-500">아카이브 기록을 바탕으로 출석 횟수와 개인 누적 거리를 자동 계산합니다</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="memberRankingList" class="space-y-3">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- Right 5 cols: 7 Member Name & Nickname Customization -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center">
+                <i class="fa-solid fa-id-badge"></i>
+              </span>
+              <div>
+                <h3 class="font-bold text-base text-forest-950">7인 멤버 프로필 & 이름 관리</h3>
+                <p class="text-xs text-stone-500">이름과 포지션을 수정하면 모든 탭에 즉시 반영됩니다</p>
+              </div>
+            </div>
+          </div>
+
+          <form id="memberNamesEditForm" class="space-y-2.5">
+            <div id="memberEditInputsList" class="space-y-2.5">
+              <!-- Populated dynamically with 7 member inputs -->
+            </div>
+            <div class="pt-2">
+              <button type="submit" class="w-full py-3 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> 멤버 이름 일괄 저장
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar (Sticky Mobile-First UX) -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-earth-200 px-2 py-1.5 shadow-lg">
+    <div class="grid grid-cols-4 gap-1 max-w-md mx-auto">
+      <button data-tab="dashboard" class="nav-tab-btn flex flex-col items-center justify-center py-2 rounded-2xl text-xs font-semibold transition">
+        <i class="fa-solid fa-compass text-base mb-0.5"></i>
+        <span>홈</span>
+      </button>
+      <button data-tab="voting" class="nav-tab-btn flex flex-col items-center justify-center py-2 rounded-2xl text-xs font-semibold transition">
+        <i class="fa-solid fa-check-to-slot text-base mb-0.5"></i>
+        <span>장소투표</span>
+      </button>
+      <button data-tab="archive" class="nav-tab-btn flex flex-col items-center justify-center py-2 rounded-2xl text-xs font-semibold transition">
+        <i class="fa-solid fa-mountain-sun text-base mb-0.5"></i>
+        <span>기록</span>
+      </button>
+      <button data-tab="members" class="nav-tab-btn flex flex-col items-center justify-center py-2 rounded-2xl text-xs font-semibold transition">
+        <i class="fa-solid fa-chart-simple text-base mb-0.5"></i>
+        <span>멤버/통계</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Modal: Edit Monthly Confirmed Plan (Place, Time, Supplies) -->
+  <div id="editPlanModal" class="fixed inset-0 z-50 hidden bg-forest-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 card-shadow border border-earth-200 space-y-4 animate-fade-in">
+      <div class="flex items-center justify-between border-b border-earth-100 pb-3">
+        <h3 class="font-bold text-lg text-forest-950">이달의 확정 산행 공지 수정</h3>
+        <button id="closeEditPlanModalBtn" type="button" class="text-stone-400 hover:text-stone-700">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="editPlanForm" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">확정 산행지 (산/코스명)</label>
+          <input id="modalPlanPlace" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">난이도</label>
+            <select id="modalPlanDiff" class="w-full px-3 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-forest-600">
+              <option value="하">하</option>
+              <option value="중">중</option>
+              <option value="상">상</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">예상 소요시간</label>
+            <input id="modalPlanDuration" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">코스 설명</label>
+          <textarea id="modalPlanDesc" rows="2" required class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">집결 시간 및 장소</label>
+          <input id="modalPlanMeetingTime" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">준비물 (쉼표로 구분)</label>
+          <input id="modalPlanSupplies" type="text" required placeholder="예: 등산화, 바람막이, 스틱, 식수 1L" class="w-full px-3.5 py-2.5 rounded-xl bg-earth-50 border border-earth-200 text-sm focus:outline-none focus:ring-2 focus:ring-forest-600" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="cancelEditPlanModalBtn" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-forest-800 hover:bg-forest-900 text-white text-sm font-bold">저장하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Reset Sample Data Confirmation (No browser confirm() allowed) -->
+  <div id="resetConfirmModal" class="fixed inset-0 z-50 hidden bg-forest-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 card-shadow border border-earth-200 space-y-4 animate-fade-in text-center">
+      <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-rotate-left"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg text-forest-950">샘플 데이터로 초기화할까요?</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+          초기 설정된 7명의 멤버, 후보지 3건, 과거 산행 기록 3건의 기본 데이터 상태로 되돌아갑니다.
+        </p>
+      </div>
+      <div class="flex items-center justify-center gap-2 pt-2">
+        <button id="cancelResetBtn" class="flex-1 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-semibold">취소</button>
+        <button id="confirmResetBtn" class="flex-1 py-2.5 rounded-xl bg-terracotta-500 hover:bg-terracotta-600 text-white text-sm font-bold">초기화 실행</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-20 md:bottom-6 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // ============================================================================
+    // 1. DEFAULT INITIAL DATA FOR FORESTONE (7 MEMBERS, CANDIDATES, ARCHIVES)
+    // ============================================================================
+    function createDefaultState() {
+      return {
+        members: [
+          { id: 'm1', name: '조현제', role: '모임장 · 리딩', attendance: 'attend' },
+          { id: 'm2', name: '우종호', role: '총무 · 정산', attendance: 'attend' },
+          { id: 'm3', name: '박상준', role: '포토그래퍼', attendance: 'attend' },
+          { id: 'm4', name: '배관호', role: '맛집 큐레이터', attendance: 'attend' },
+          { id: 'm5', name: '한상열', role: '장비 마스터', attendance: 'attend' },
+          { id: 'm6', name: '허태철', role: '코스 파인더', attendance: 'undecided' },
+          { id: 'm7', name: '송재순', role: '분위기 메이커', attendance: 'absent' }
+        ],
+        confirmedPlan: {
+          placeName: '북한산 백운대 숨은벽 능선 코스',
+          difficulty: '중',
+          duration: '약 4시간 30분',
+          description: '밤골탐방지원센터에서 출발해 숨은벽 화강암 능선 조망을 감상하고 백운대 정상(836m) 인증 후 우이동 계곡으로 하산하는 포레스톤 가을 시그니처 코스입니다.',
+          meetingTime: '오전 08:30 · 우이신설선 북한산우이역 2번 출구 앞',
+          supplies: ['등산화(릿지화)', '바람막이 자켓', '등산스틱', '생수 1L 이상', '행동식(에너지바)', '장갑']
+        },
+        candidates: [
+          {
+            id: 'cand-1',
+            name: '설악산 울산바위 전망 코스',
+            difficulty: '중',
+            duration: '약 4시간',
+            description: '소공원에서 출발해 흔들바위를 거쳐 울산바위 정상에 오르는 코스. 압도적인 화강암 병풍 조망과 동해 바다 풍경이 일품입니다.',
+            voters: ['m1', 'm2', 'm3', 'm5']
+          },
+          {
+            id: 'cand-2',
+            name: '소백산 비로봉 천동~어의곡 코스',
+            difficulty: '중',
+            duration: '약 5시간',
+            description: '부드러운 초원 능선과 주목 군락지를 따라 걷는 힐링 능선길. 정상 칼바람 뒤 맛보는 하산길 약선 정식이 매력적입니다.',
+            voters: ['m4', 'm6', 'm7']
+          },
+          {
+            id: 'cand-3',
+            name: '관악산 육봉~연주대 암릉 코스',
+            difficulty: '상',
+            duration: '약 4시간 30분',
+            description: '도심 속 짜릿한 바위 맛을 즐길 수 있는 암릉 코스로 접근성이 뛰어나고 하산 후 사당역 뒷풀이 동선이 편리합니다.',
+            voters: ['m1', 'm3']
+          }
+        ],
+        archives: [
+          {
+            id: 'arch-1',
+            date: '2026-09-19',
+            place: '팔공산 비로봉 & 동봉 능선 종주',
+            attendees: ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'],
+            distanceKm: 11.4,
+            restaurant: '산골참숯오리백숙 & 손두부 (동화사 입구)',
+            review: '선선한 초가을 바람과 능선 바위 조망이 완벽했고, 하산 후 오리백숙 국물에 피로가 싹 풀린 산행!'
+          },
+          {
+            id: 'arch-2',
+            date: '2026-08-15',
+            place: '오대산 선재길 계곡 & 비로봉 트래킹',
+            attendees: ['m1', 'm2', 'm3', 'm4', 'm5', 'm7'],
+            distanceKm: 13.2,
+            restaurant: '월정사 산채정식 황기백숙 마을',
+            review: '전나무 숲길 피톤치드와 시원한 계곡물 덕분에 한여름에도 발걸음이 가벼웠던 최고의 힐링 코스!'
+          },
+          {
+            id: 'arch-3',
+            date: '2026-07-18',
+            place: '지리산 노고단 운해 & 반야봉 조망 코스',
+            attendees: ['m1', 'm2', 'm4', 'm5', 'm6', 'm7'],
+            distanceKm: 9.8,
+            restaurant: '구례 섬진강 재첩국 & 흑돼지 석쇠구이',
+            review: '새벽 성삼재에서 마주한 황홀한 운해가 아직도 눈에 선합니다. 포레스톤 결성 이래 최고의 인생샷 데이!'
+          }
+        ]
+      };
+    }
+
+    // Current in-memory state
+    let appState = createDefaultState();
+    let currentTab = 'dashboard';
+    let activeVoterId = 'm1';
+    let showNextMonthSchedule = false; // Toggle between immediate upcoming 3rd Saturday vs following month
+
+    // ============================================================================
+    // 2. AUTOMATIC 3RD SATURDAY OF THE MONTH CALCULATOR
+    // ============================================================================
+    /**
+     * Given a year and 0-indexed month, returns a Date object for the 3rd Saturday of that month.
+     */
+    function getThirdSaturdayOfMonth(year, monthIndex) {
+      const firstDayOfMonth = new Date(year, monthIndex, 1);
+      const dayOfWeek = firstDayOfMonth.getDay(); // 0 (Sun) ~ 6 (Sat)
+      const offsetToFirstSaturday = (6 - dayOfWeek + 7) % 7;
+      const firstSaturdayDate = 1 + offsetToFirstSaturday;
+      const thirdSaturdayDate = firstSaturdayDate + 14;
+      return new Date(year, monthIndex, thirdSaturdayDate, 0, 0, 0, 0);
+    }
+
+    /**
+     * Calculates the upcoming 3rd Saturday based on today's date.
+     * If showNextMonthOffset is true, shows the month after the immediate upcoming one.
+     */
+    function getUpcomingThirdSaturdayInfo(extraMonthOffset = 0) {
+      const now = new Date();
+      const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+
+      let targetYear = now.getFullYear();
+      let targetMonth = now.getMonth();
+
+      let candidateDate = getThirdSaturdayOfMonth(targetYear, targetMonth);
+
+      // If this month's 3rd Saturday has already passed, move to next month
+      if (todayMidnight.getTime() > candidateDate.getTime()) {
+        targetMonth += 1;
+        if (targetMonth > 11) {
+          targetMonth = 0;
+          targetYear += 1;
+        }
+        candidateDate = getThirdSaturdayOfMonth(targetYear, targetMonth);
+      }
+
+      // Apply optional offset if user toggled "next month preview"
+      if (extraMonthOffset > 0) {
+        targetMonth += extraMonthOffset;
+        if (targetMonth > 11) {
+          targetYear += Math.floor(targetMonth / 12);
+          targetMonth = targetMonth % 12;
+        }
+        candidateDate = getThirdSaturdayOfMonth(targetYear, targetMonth);
+      }
+
+      const diffMs = candidateDate.getTime() - todayMidnight.getTime();
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+      const y = candidateDate.getFullYear();
+      const m = candidateDate.getMonth() + 1;
+      const d = candidateDate.getDate();
+      const isoDate = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+      return {
+        dateObj: candidateDate,
+        formattedKorean: `${y}년 ${m}월 ${d}일 (토)`,
+        monthLabel: `${m}월 정기 산행`,
+        diffDays,
+        isoDate
+      };
+    }
+
+    // ============================================================================
+    // 3. CLOUD PERSISTENCE SETUP (FIRESTORE) WITH SAFE IN-MEMORY FALLBACK
+    // ============================================================================
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'forestone-trekking-app';
+
+    function updateSyncIndicator(statusText, isOnline = true) {
+      const badgeText = document.getElementById('syncStatusText');
+      if (badgeText) badgeText.textContent = statusText;
+    }
+
+    async function saveAppState() {
+      renderAll();
+      if (!db || !currentUser) return;
+      try {
+        updateSyncIndicator('저장 중...', true);
+        const stateDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'forestone_club', 'club_state_v2');
+        await setDoc(stateDocRef, {
+          updatedAt: Date.now(),
+          payload: JSON.stringify(appState)
+        });
+        updateSyncIndicator('실시간 저장됨', true);
+      } catch (err) {
+        console.error('Error saving state:', err);
+        updateSyncIndicator('세션 저장됨', false);
+      }
+    }
+
+    async function initCloudSync() {
+      try {
+        if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+          updateSyncIndicator('자동 저장 활성', true);
+          return;
+        }
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+          currentUser = user;
+          if (!currentUser) return;
+
+          const stateDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'forestone_club', 'club_state_v2');
+          onSnapshot(
+            stateDocRef,
+            (snapshot) => {
+              if (snapshot.exists()) {
+                const data = snapshot.data();
+                if (data && data.payload) {
+                  try {
+                    appState = JSON.parse(data.payload);
+                    renderAll();
+                    updateSyncIndicator('자동 동기화됨', true);
+                  } catch (parseErr) {
+                    console.error('Payload parse error:', parseErr);
+                  }
+                }
+              } else {
+                // Seed initial sample data on first load
+                saveAppState();
+              }
+            },
+            (error) => {
+              console.error('Snapshot listener error:', error);
+              updateSyncIndicator('세션 모드', false);
+            }
+          );
+        });
+      } catch (e) {
+        console.warn('Cloud initialization fallback:', e);
+        updateSyncIndicator('자동 저장 활성', true);
+      }
+    }
+
+    // ============================================================================
+    // 4. UI TOAST HELPER & DIFFICULTY BADGE FORMATTER
+    // ============================================================================
+    function showToast(message, icon = 'fa-circle-check') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-forest-950 text-white text-xs sm:text-sm font-semibold shadow-xl border border-forest-700 animate-fade-in';
+      toast.innerHTML = `<i class="fa-solid ${icon} text-emerald-400"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
+      }, 2600);
+    }
+
+    function getDifficultyBadgeHTML(diff) {
+      if (diff === '상') {
+        return `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">난이도 상</span>`;
+      }
+      if (diff === '하') {
+        return `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">난이도 하</span>`;
+      }
+      return `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">난이도 중</span>`;
+    }
+
+    function getMemberNameById(memberId) {
+      const found = appState.members.find(m => m.id === memberId);
+      return found ? found.name : '멤버';
+    }
+
+    // ============================================================================
+    // 5. RENDER FUNCTIONS FOR ALL 4 TABS
+    // ============================================================================
+    function renderDashboard() {
+      const schedule = getUpcomingThirdSaturdayInfo(showNextMonthSchedule ? 1 : 0);
+
+      // Update Date & D-Day Display
+      document.getElementById('nextTrekDateDisplay').textContent = schedule.formattedKorean;
+      document.getElementById('meetingSequenceSubtitle').textContent = `포레스톤 ${schedule.monthLabel} (매월 3주째 토요일)`;
+
+      const ddayBadge = document.getElementById('ddayBadge');
+      if (schedule.diffDays === 0) {
+        ddayBadge.textContent = 'D-DAY · 오늘 산행일!';
+        ddayBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-400 text-forest-950 animate-pulse';
+      } else {
+        ddayBadge.textContent = `D-${schedule.diffDays}`;
+        ddayBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-400 text-forest-950';
+      }
+
+      document.getElementById('scheduleMonthToggleLabel').textContent = showNextMonthSchedule
+        ? '이번 산행일 보기'
+        : '다음 달 3주째 토요일 보기';
+
+      // Update Confirmed Monthly Place & Supplies
+      const plan = appState.confirmedPlan;
+      document.getElementById('confirmedPlaceTitle').textContent = plan.placeName;
+      document.getElementById('confirmedDurationText').innerHTML = `<i class="fa-regular fa-clock mr-1"></i>${plan.duration}`;
+      document.getElementById('confirmedPlaceDesc').textContent = plan.description;
+      document.getElementById('confirmedMeetingTime').textContent = plan.meetingTime;
+
+      const diffBadge = document.getElementById('confirmedDifficultyBadge');
+      diffBadge.textContent = `난이도 ${plan.difficulty}`;
+      diffBadge.className = plan.difficulty === '상'
+        ? 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-700 text-white'
+        : plan.difficulty === '하'
+          ? 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-700 text-white'
+          : 'text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-forest-800 text-white';
+
+      const suppliesContainer = document.getElementById('confirmedSuppliesTags');
+      suppliesContainer.innerHTML = (plan.supplies || []).map(item => `
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white text-forest-900 border border-earth-200 shadow-2xs flex items-center gap-1">
+          <i class="fa-solid fa-check text-[10px] text-forest-600"></i> ${item}
+        </span>
+      `).join('');
+
+      // Calculate Attendance Summary
+      const attendMembers = appState.members.filter(m => m.attendance === 'attend');
+      const absentMembers = appState.members.filter(m => m.attendance === 'absent');
+      const undecidedMembers = appState.members.filter(m => m.attendance === 'undecided');
+      const total = appState.members.length || 7;
+
+      document.getElementById('heroAttendingCount').textContent = attendMembers.length;
+      document.getElementById('heroAttendanceRatioText').textContent = `${attendMembers.length} / ${total}명 참석`;
+      document.getElementById('summaryAttendNum').textContent = `${attendMembers.length}명`;
+      document.getElementById('summaryUndecidedNum').textContent = `${undecidedMembers.length}명`;
+      document.getElementById('summaryAbsentNum').textContent = `${absentMembers.length}명`;
+
+      document.getElementById('barAttend').style.width = `${(attendMembers.length / total) * 100}%`;
+      document.getElementById('barUndecided').style.width = `${(undecidedMembers.length / total) * 100}%`;
+      document.getElementById('barAbsent').style.width = `${(absentMembers.length / total) * 100}%`;
+
+      document.getElementById('dashboardAttendingNamesPreview').textContent = attendMembers.length > 0
+        ? `참석 확정: ${attendMembers.map(m => m.name).join(', ')}`
+        : '현재 참석 확정 멤버가 없습니다.';
+
+      // Render 7 Member One-Click Toggle Cards
+      const grid = document.getElementById('dashboardAttendanceGrid');
+      grid.innerHTML = appState.members.map((member, idx) => {
+        let statusConfig = {
+          label: '참석',
+          icon: 'fa-circle-check',
+          cardBorder: 'border-emerald-300 bg-emerald-50/50 hover:bg-emerald-50',
+          badgeClass: 'bg-emerald-600 text-white',
+          avatarClass: 'bg-emerald-700 text-white'
+        };
+        if (member.attendance === 'absent') {
+          statusConfig = {
+            label: '불참',
+            icon: 'fa-circle-xmark',
+            cardBorder: 'border-rose-200 bg-rose-50/40 hover:bg-rose-50',
+            badgeClass: 'bg-rose-500 text-white',
+            avatarClass: 'bg-stone-400 text-white'
+          };
+        } else if (member.attendance === 'undecided') {
+          statusConfig = {
+            label: '미정',
+            icon: 'fa-circle-question',
+            cardBorder: 'border-amber-200 bg-amber-50/40 hover:bg-amber-50',
+            badgeClass: 'bg-amber-500 text-white',
+            avatarClass: 'bg-amber-600 text-white'
+          };
+        }
+
+        return `
+          <button
+            type="button"
+            data-member-toggle="${member.id}"
+            class="w-full text-left p-3.5 rounded-2xl border ${statusConfig.cardBorder} transition flex items-center justify-between gap-3 group cursor-pointer select-none"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl ${statusConfig.avatarClass} font-display font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                0${idx + 1}
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-forest-950 truncate">${member.name}</p>
+                <p class="text-[11px] text-stone-500 truncate">${member.role || '포레스톤 크루'}</p>
+              </div>
+            </div>
+            <div class="shrink-0 flex items-center gap-1.5">
+              <span class="px-3 py-1 rounded-xl text-xs font-bold ${statusConfig.badgeClass} flex items-center gap-1.5 shadow-2xs group-active:scale-95 transition">
+                <i class="fa-solid ${statusConfig.icon}"></i>
+                ${statusConfig.label}
+              </span>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderVoting() {
+      // Update Navigation Badge
+      document.getElementById('navVoteCountBadge').textContent = appState.candidates.length;
+
+      // Populate Active Voter Selector
+      const voterSelect = document.getElementById('activeVoterSelect');
+      if (!appState.members.some(m => m.id === activeVoterId)) {
+        activeVoterId = appState.members[0]?.id || 'm1';
+      }
+      voterSelect.innerHTML = appState.members.map(m => `
+        <option value="${m.id}" ${m.id === activeVoterId ? 'selected' : ''}>${m.name}</option>
+      `).join('');
+
+      // Sort copy for identifying top candidate
+      const sorted = [...appState.candidates].sort((a, b) => (b.voters?.length || 0) - (a.voters?.length || 0));
+      const topCandidate = sorted[0];
+      const topVoteCount = topCandidate ? (topCandidate.voters?.length || 0) : 0;
+
+      const topTitleEl = document.getElementById('topVotedCandidateTitle');
+      if (topCandidate) {
+        topTitleEl.textContent = `${topCandidate.name} (${topVoteCount}표)`;
+      } else {
+        topTitleEl.textContent = '등록된 후보지가 없습니다';
+      }
+
+      const listEl = document.getElementById('candidateCardsList');
+      if (appState.candidates.length === 0) {
+        listEl.innerHTML = `
+          <div class="bg-white rounded-3xl p-8 text-center border border-earth-200 text-stone-500">
+            등록된 후보지가 없습니다. 왼쪽 폼에서 새로운 산행 코스를 추천해주세요!
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = appState.candidates.map(cand => {
+        const voters = cand.voters || [];
+        const hasVoted = voters.includes(activeVoterId);
+        const isTop = topVoteCount > 0 && voters.length === topVoteCount;
+        const isCurrentlyConfirmed = appState.confirmedPlan.placeName === cand.name;
+
+        const voterBadges = voters.length > 0
+          ? voters.map(vid => `
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-forest-100 text-forest-900 border border-forest-200">
+                <i class="fa-solid fa-user text-[9px] text-forest-600 mr-1"></i>${getMemberNameById(vid)}
+              </span>
+            `).join('')
+          : `<span class="text-xs text-stone-400">아직 투표한 멤버가 없습니다</span>`;
+
+        return `
+          <div class="bg-white rounded-3xl p-5 card-shadow border ${isTop ? 'border-forest-600 ring-1 ring-forest-600/30' : 'border-earth-200/80'} transition space-y-3.5">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div class="space-y-1">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  ${isTop ? `<span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-400 text-forest-950"><i class="fa-solid fa-crown mr-1"></i>최다 득표</span>` : ''}
+                  ${isCurrentlyConfirmed ? `<span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-forest-800 text-white"><i class="fa-solid fa-check mr-1"></i>현재 이달의 확정 장소</span>` : ''}
+                  ${getDifficultyBadgeHTML(cand.difficulty)}
+                  <span class="text-xs font-semibold text-stone-500"><i class="fa-regular fa-clock mr-1"></i>${cand.duration}</span>
+                </div>
+                <h4 class="text-lg font-extrabold text-forest-950">${cand.name}</h4>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="text-right mr-1">
+                  <span class="font-display text-2xl font-extrabold text-forest-900">${voters.length}</span>
+                  <span class="text-xs font-semibold text-stone-500">표</span>
+                </div>
+                <button
+                  type="button"
+                  data-vote-cand="${cand.id}"
+                  class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-1.5 ${
+                    hasVoted
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
+                      : 'bg-earth-100 hover:bg-earth-200 text-forest-950 border border-earth-300'
+                  }"
+                >
+                  <i class="fa-solid ${hasVoted ? 'fa-check-double' : 'fa-thumbs-up'}"></i>
+                  ${hasVoted ? '투표완료 (취소)' : '투표하기'}
+                </button>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">${cand.description}</p>
+
+            <!-- Voter list & Direct Confirm Button -->
+            <div class="pt-3 border-t border-earth-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[11px] font-bold text-stone-500 mr-1">투표 멤버:</span>
+                ${voterBadges}
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                <button
+                  type="button"
+                  data-confirm-cand="${cand.id}"
+                  class="text-xs font-bold px-3 py-1.5 rounded-xl bg-forest-50 hover:bg-forest-100 text-forest-800 border border-forest-200 transition"
+                >
+                  <i class="fa-solid fa-location-check mr-1"></i>이달의 장소로 확정
+                </button>
+                <button
+                  type="button"
+                  data-delete-cand="${cand.id}"
+                  title="후보지 삭제"
+                  class="text-xs px-2.5 py-1.5 rounded-xl text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderArchive() {
+      document.getElementById('navArchiveCountBadge').textContent = appState.archives.length;
+
+      // Render member checkboxes inside Add Archive form
+      const checkboxGrid = document.getElementById('archMembersCheckboxGrid');
+      checkboxGrid.innerHTML = appState.members.map(m => `
+        <label class="flex items-center gap-2 p-2.5 rounded-xl bg-earth-50 hover:bg-earth-100 border border-earth-200 cursor-pointer text-xs font-semibold text-forest-950 select-none">
+          <input type="checkbox" name="archAttendee" value="${m.id}" checked class="accent-forest-800 w-4 h-4 rounded" />
+          <span class="truncate">${m.name}</span>
+        </label>
+      `).join('');
+
+      // Sort archives newest first
+      const sortedArchives = [...appState.archives].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      const timelineEl = document.getElementById('archiveTimelineList');
+
+      if (sortedArchives.length === 0) {
+        timelineEl.innerHTML = `
+          <div class="bg-white rounded-3xl p-8 text-center border border-earth-200 text-stone-500">
+            아직 등록된 산행 기록이 없습니다. 첫 트래킹 기록을 남겨보세요!
+          </div>
+        `;
+        return;
+      }
+
+      timelineEl.innerHTML = sortedArchives.map((item, idx) => {
+        const attendeeNames = (item.attendees || []).map(id => getMemberNameById(id));
+        const sequenceNum = sortedArchives.length - idx;
+
+        return `
+          <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-earth-200/80 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3.5 border-b border-earth-100">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2.5 py-1 rounded-xl text-xs font-extrabold bg-forest-900 text-earth-100">
+                  제 ${sequenceNum}차 정기 산행
+                </span>
+                <span class="text-xs font-bold text-stone-500">
+                  <i class="fa-regular fa-calendar mr-1"></i>${item.date}
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-200">
+                  <i class="fa-solid fa-person-walking mr-1"></i>${Number(item.distanceKm).toFixed(1)} km 완주
+                </span>
+              </div>
+
+              <button
+                type="button"
+                data-delete-archive="${item.id}"
+                class="self-end sm:self-auto text-xs text-stone-400 hover:text-rose-600 px-2 py-1 rounded-lg transition"
+                title="기록 삭제"
+              >
+                <i class="fa-regular fa-trash-can"></i> 삭제
+              </button>
+            </div>
+
+            <div class="mt-3.5 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+              <div class="lg:col-span-7 space-y-2">
+                <h4 class="text-lg sm:text-xl font-extrabold text-forest-950 flex items-center gap-2">
+                  <i class="fa-solid fa-mountain text-forest-700 text-base"></i>
+                  ${item.place}
+                </h4>
+                <div class="p-3 rounded-2xl bg-earth-50 border border-earth-200/80 text-xs sm:text-sm text-forest-950 font-medium italic">
+                  “${item.review}”
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 space-y-2.5 bg-forest-50/60 p-3.5 rounded-2xl border border-forest-100">
+                <div class="flex items-start gap-2 text-xs">
+                  <span class="font-bold text-forest-800 shrink-0"><i class="fa-solid fa-utensils mr-1 text-terracotta-500"></i>뒷풀이 맛집:</span>
+                  <span class="font-semibold text-stone-700">${item.restaurant}</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs font-bold text-forest-800">
+                    <i class="fa-solid fa-users mr-1 text-forest-600"></i>함께 걸은 멤버 (${attendeeNames.length}명)
+                  </div>
+                  <div class="flex flex-wrap gap-1">
+                    ${attendeeNames.map(n => `
+                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-white text-forest-900 border border-forest-200">${n}</span>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMembersAndStats() {
+      const totalTreks = appState.archives.length;
+      const totalDistance = appState.archives.reduce((acc, cur) => acc + (Number(cur.distanceKm) || 0), 0);
+      const avgDistance = totalTreks > 0 ? (totalDistance / totalTreks) : 0;
+
+      // Calculate per-member attendance count & distance from Archives
+      const memberStats = appState.members.map(member => {
+        let attendedCount = 0;
+        let personalDistance = 0;
+        appState.archives.forEach(arch => {
+          if ((arch.attendees || []).includes(member.id)) {
+            attendedCount += 1;
+            personalDistance += (Number(arch.distanceKm) || 0);
+          }
+        });
+        const rate = totalTreks > 0 ? Math.round((attendedCount / totalTreks) * 100) : 0;
+        return {
+          ...member,
+          attendedCount,
+          personalDistance,
+          rate
+        };
+      });
+
+      // Overall average attendance rate
+      const avgAttendanceRate = memberStats.length > 0
+        ? Math.round(memberStats.reduce((sum, m) => sum + m.rate, 0) / memberStats.length)
+        : 0;
+
+      // Sort by attendedCount DESC, then personalDistance DESC
+      const rankedMembers = [...memberStats].sort((a, b) => {
+        if (b.attendedCount !== a.attendedCount) return b.attendedCount - a.attendedCount;
+        return b.personalDistance - a.personalDistance;
+      });
+
+      const mvp = rankedMembers[0];
+
+      // Update Summary Metric Cards
+      document.getElementById('statTotalTreks').textContent = totalTreks;
+      document.getElementById('statTotalDistance').textContent = totalDistance.toFixed(1);
+      document.getElementById('statAvgDistanceSub').textContent = `회당 평균 ${avgDistance.toFixed(1)} km`;
+      document.getElementById('statAvgAttendanceRate').textContent = avgAttendanceRate;
+      document.getElementById('statMvpMemberName').textContent = mvp ? mvp.name : '-';
+      document.getElementById('statMvpSubtext').textContent = mvp
+        ? `출석 ${mvp.attendedCount}회 (${mvp.rate}%) · ${mvp.personalDistance.toFixed(1)}km`
+        : '산행 기록을 추가해보세요';
+
+      // Render Ranking Board
+      const rankingListEl = document.getElementById('memberRankingList');
+      rankingListEl.innerHTML = rankedMembers.map((m, index) => {
+        const rank = index + 1;
+        let medalBadge = `<span class="w-7 h-7 rounded-lg bg-stone-100 text-stone-700 font-display font-bold text-xs flex items-center justify-center">${rank}</span>`;
+        if (rank === 1) {
+          medalBadge = `<span class="w-7 h-7 rounded-lg bg-amber-400 text-forest-950 font-display font-extrabold text-xs flex items-center justify-center shadow-2xs"><i class="fa-solid fa-crown"></i></span>`;
+        } else if (rank === 2) {
+          medalBadge = `<span class="w-7 h-7 rounded-lg bg-stone-300 text-stone-900 font-display font-extrabold text-xs flex items-center justify-center">2</span>`;
+        } else if (rank === 3) {
+          medalBadge = `<span class="w-7 h-7 rounded-lg bg-amber-700/80 text-white font-display font-extrabold text-xs flex items-center justify-center">3</span>`;
+        }
+
+        return `
+          <div class="p-3.5 rounded-2xl bg-earth-50/70 border border-earth-200/90 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                ${medalBadge}
+                <div class="min-w-0">
+                  <p class="font-bold text-sm text-forest-950 truncate">${m.name}</p>
+                  <p class="text-[11px] text-stone-500">${m.role || '포레스톤 멤버'} · 누적 ${m.personalDistance.toFixed(1)} km</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="font-display font-extrabold text-base text-forest-900">${m.rate}%</span>
+                <span class="text-xs text-stone-500 block">${m.attendedCount} / ${totalTreks}회 출석</span>
+              </div>
+            </div>
+            <div class="w-full h-2 bg-earth-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-forest-700 to-emerald-500 rounded-full transition-all duration-500" style="width: ${m.rate}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Member Edit Inputs
+      const editListEl = document.getElementById('memberEditInputsList');
+      editListEl.innerHTML = appState.members.map((m, idx) => `
+        <div class="flex items-center gap-2 p-2 rounded-2xl bg-earth-50 border border-earth-200">
+          <span class="w-7 h-7 rounded-xl bg-forest-800 text-white font-display text-xs font-bold flex items-center justify-center shrink-0">
+            ${idx + 1}
+          </span>
+          <input
+            type="text"
+            data-edit-member-name="${m.id}"
+            value="${m.name}"
+            required
+            placeholder="멤버 이름"
+            class="w-1/2 px-2.5 py-1.5 rounded-xl bg-white border border-earth-200 text-xs sm:text-sm font-bold text-forest-950 focus:outline-none focus:ring-2 focus:ring-forest-600"
+          />
+          <input
+            type="text"
+            data-edit-member-role="${m.id}"
+            value="${m.role || ''}"
+            placeholder="역할/별칭 (선택)"
+            class="w-1/2 px-2.5 py-1.5 rounded-xl bg-white border border-earth-200 text-xs text-stone-600 focus:outline-none focus:ring-2 focus:ring-forest-600"
+          />
+        </div>
+      `).join('');
+    }
+
+    function updateNavigationStyles() {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        const tab = btn.getAttribute('data-tab');
+        if (tab === currentTab) {
+          btn.classList.add('active-tab-pill');
+          btn.classList.remove('text-stone-500', 'text-forest-100');
+        } else {
+          btn.classList.remove('active-tab-pill');
+        }
+      });
+
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        if (panel.id === `tab-${currentTab}`) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    function renderAll() {
+      updateNavigationStyles();
+      renderDashboard();
+      renderVoting();
+      renderArchive();
+      renderMembersAndStats();
+    }
+
+    // ============================================================================
+    // 6. EVENT LISTENERS & USER ACTIONS
+    // ============================================================================
+    function setupEventListeners() {
+      // Tab switching (Desktop + Mobile nav)
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentTab = btn.getAttribute('data-tab');
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Quick link inside dashboard to switch tab
+      document.querySelectorAll('.quick-tab-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentTab = btn.getAttribute('data-goto-tab');
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Toggle schedule month preview (This month's upcoming vs Next month's 3rd Saturday)
+      document.getElementById('toggleScheduleMonthBtn').addEventListener('click', () => {
+        showNextMonthSchedule = !showNextMonthSchedule;
+        renderDashboard();
+      });
+
+      // One-Click Member Attendance Toggle (attend -> absent -> undecided -> attend)
+      document.getElementById('dashboardAttendanceGrid').addEventListener('click', (e) => {
+        const cardBtn = e.target.closest('[data-member-toggle]');
+        if (!cardBtn) return;
+        const memberId = cardBtn.getAttribute('data-member-toggle');
+        const member = appState.members.find(m => m.id === memberId);
+        if (!member) return;
+
+        const cycle = { attend: 'absent', absent: 'undecided', undecided: 'attend' };
+        member.attendance = cycle[member.attendance] || 'attend';
+        const statusLabel = member.attendance === 'attend' ? '참석' : member.attendance === 'absent' ? '불참' : '미정';
+        showToast(`${member.name}님의 상태가 [${statusLabel}]으로 변경되었습니다.`);
+        saveAppState();
+      });
+
+      // Bulk Attendance Buttons
+      document.getElementById('markAllAttendBtn').addEventListener('click', () => {
+        appState.members.forEach(m => { m.attendance = 'attend'; });
+        showToast('7명 전원 참석으로 변경되었습니다!');
+        saveAppState();
+      });
+
+      document.getElementById('markAllUndecidedBtn').addEventListener('click', () => {
+        appState.members.forEach(m => { m.attendance = 'undecided'; });
+        showToast('전원 미정 상태로 초기화되었습니다.');
+        saveAppState();
+      });
+
+      // Shortcut: Complete current trek -> Open Archive Tab with prefilled date, place & attending members
+      document.getElementById('completeTrekToArchiveBtn').addEventListener('click', () => {
+        const schedule = getUpcomingThirdSaturdayInfo(showNextMonthSchedule ? 1 : 0);
+        currentTab = 'archive';
+        renderAll();
+
+        const formContainer = document.getElementById('newArchiveFormContainer');
+        formContainer.classList.remove('hidden');
+        document.getElementById('archDateInput').value = schedule.isoDate;
+        document.getElementById('archPlaceInput').value = appState.confirmedPlan.placeName;
+
+        // Check only members whose dashboard attendance is 'attend'
+        const attendingIds = appState.members.filter(m => m.attendance === 'attend').map(m => m.id);
+        document.querySelectorAll('input[name="archAttendee"]').forEach(cb => {
+          cb.checked = attendingIds.length > 0 ? attendingIds.includes(cb.value) : true;
+        });
+
+        showToast('이달의 산행 정보가 아카이브 작성 폼에 자동 입력되었습니다!');
+      });
+
+      // Edit Monthly Confirmed Plan Modal
+      const editPlanModal = document.getElementById('editPlanModal');
+      function openEditPlanModal() {
+        const plan = appState.confirmedPlan;
+        document.getElementById('modalPlanPlace').value = plan.placeName;
+        document.getElementById('modalPlanDiff').value = plan.difficulty;
+        document.getElementById('modalPlanDuration').value = plan.duration;
+        document.getElementById('modalPlanDesc').value = plan.description;
+        document.getElementById('modalPlanMeetingTime').value = plan.meetingTime;
+        document.getElementById('modalPlanSupplies').value = (plan.supplies || []).join(', ');
+        editPlanModal.classList.remove('hidden');
+      }
+      function closeEditPlanModal() {
+        editPlanModal.classList.add('hidden');
+      }
+
+      document.getElementById('openEditPlanModalBtn').addEventListener('click', openEditPlanModal);
+      document.getElementById('closeEditPlanModalBtn').addEventListener('click', closeEditPlanModal);
+      document.getElementById('cancelEditPlanModalBtn').addEventListener('click', closeEditPlanModal);
+
+      document.getElementById('editPlanForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        appState.confirmedPlan = {
+          placeName: document.getElementById('modalPlanPlace').value.trim(),
+          difficulty: document.getElementById('modalPlanDiff').value,
+          duration: document.getElementById('modalPlanDuration').value.trim(),
+          description: document.getElementById('modalPlanDesc').value.trim(),
+          meetingTime: document.getElementById('modalPlanMeetingTime').value.trim(),
+          supplies: document.getElementById('modalPlanSupplies').value
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean)
+        };
+        closeEditPlanModal();
+        showToast('이달의 산행 공지가 업데이트되었습니다.');
+        saveAppState();
+      });
+
+      // Active Voter Change
+      document.getElementById('activeVoterSelect').addEventListener('change', (e) => {
+        activeVoterId = e.target.value;
+        renderVoting();
+      });
+
+      // Add New Candidate Form
+      document.getElementById('addCandidateForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('candNameInput').value.trim();
+        const difficulty = document.getElementById('candDiffInput').value;
+        const duration = document.getElementById('candDurationInput').value.trim();
+        const description = document.getElementById('candDescInput').value.trim();
+        if (!name) return;
+
+        appState.candidates.unshift({
+          id: 'cand-' + Date.now(),
+          name,
+          difficulty,
+          duration,
+          description,
+          voters: [activeVoterId]
+        });
+
+        e.target.reset();
+        showToast(`'${name}' 후보지가 등록되고 첫 투표가 반영되었습니다!`);
+        saveAppState();
+      });
+
+      // Candidate List Actions: Vote Toggle, Confirm as Monthly Place, Delete
+      document.getElementById('candidateCardsList').addEventListener('click', (e) => {
+        const voteBtn = e.target.closest('[data-vote-cand]');
+        if (voteBtn) {
+          const candId = voteBtn.getAttribute('data-vote-cand');
+          const cand = appState.candidates.find(c => c.id === candId);
+          if (!cand) return;
+          cand.voters = cand.voters || [];
+          const voterName = getMemberNameById(activeVoterId);
+
+          if (cand.voters.includes(activeVoterId)) {
+            cand.voters = cand.voters.filter(id => id !== activeVoterId);
+            showToast(`${voterName}님이 '${cand.name}' 투표를 취소했습니다.`);
+          } else {
+            cand.voters.push(activeVoterId);
+            showToast(`${voterName}님이 '${cand.name}'에 투표했습니다!`);
+          }
+          saveAppState();
+          return;
+        }
+
+        const confirmBtn = e.target.closest('[data-confirm-cand]');
+        if (confirmBtn) {
+          const candId = confirmBtn.getAttribute('data-confirm-cand');
+          const cand = appState.candidates.find(c => c.id === candId);
+          if (!cand) return;
+
+          appState.confirmedPlan.placeName = cand.name;
+          appState.confirmedPlan.difficulty = cand.difficulty;
+          appState.confirmedPlan.duration = cand.duration;
+          appState.confirmedPlan.description = cand.description;
+
+          showToast(`'${cand.name}' 코스가 이달의 확정 장소로 반영되었습니다!`, 'fa-award');
+          saveAppState();
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-delete-cand]');
+        if (deleteBtn) {
+          const candId = deleteBtn.getAttribute('data-delete-cand');
+          appState.candidates = appState.candidates.filter(c => c.id !== candId);
+          showToast('후보지가 삭제되었습니다.');
+          saveAppState();
+        }
+      });
+
+      // Confirm Top-Voted Candidate Button
+      document.getElementById('confirmTopCandidateBtn').addEventListener('click', () => {
+        if (appState.candidates.length === 0) {
+          showToast('등록된 후보지가 없습니다.', 'fa-circle-exclamation');
+          return;
+        }
+        const sorted = [...appState.candidates].sort((a, b) => (b.voters?.length || 0) - (a.voters?.length || 0));
+        const winner = sorted[0];
+        appState.confirmedPlan.placeName = winner.name;
+        appState.confirmedPlan.difficulty = winner.difficulty;
+        appState.confirmedPlan.duration = winner.duration;
+        appState.confirmedPlan.description = winner.description;
+
+        currentTab = 'dashboard';
+        showToast(`최다 득표지 '${winner.name}'이(가) 이달의 산행지로 확정되었습니다!`, 'fa-crown');
+        saveAppState();
+      });
+
+      // Archive Form Toggle & Submission
+      const archiveFormContainer = document.getElementById('newArchiveFormContainer');
+      document.getElementById('toggleNewArchiveFormBtn').addEventListener('click', () => {
+        const isHidden = archiveFormContainer.classList.contains('hidden');
+        if (isHidden) {
+          const schedule = getUpcomingThirdSaturdayInfo(0);
+          if (!document.getElementById('archDateInput').value) {
+            document.getElementById('archDateInput').value = schedule.isoDate;
+          }
+          archiveFormContainer.classList.remove('hidden');
+        } else {
+          archiveFormContainer.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('closeNewArchiveFormBtn').addEventListener('click', () => {
+        archiveFormContainer.classList.add('hidden');
+      });
+      document.getElementById('cancelArchiveFormBtn').addEventListener('click', () => {
+        archiveFormContainer.classList.add('hidden');
+      });
+
+      document.getElementById('archSelectAllMembersBtn').addEventListener('click', () => {
+        const boxes = Array.from(document.querySelectorAll('input[name="archAttendee"]'));
+        const allChecked = boxes.every(b => b.checked);
+        boxes.forEach(b => { b.checked = !allChecked; });
+      });
+
+      document.getElementById('addArchiveForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = document.getElementById('archDateInput').value;
+        const place = document.getElementById('archPlaceInput').value.trim();
+        const distanceKm = parseFloat(document.getElementById('archDistanceInput').value) || 0;
+        const restaurant = document.getElementById('archRestaurantInput').value.trim();
+        const review = document.getElementById('archReviewInput').value.trim();
+        const attendees = Array.from(document.querySelectorAll('input[name="archAttendee"]:checked')).map(cb => cb.value);
+
+        if (attendees.length === 0) {
+          showToast('최소 1명 이상의 참석 멤버를 체크해주세요.', 'fa-circle-exclamation');
+          return;
+        }
+
+        appState.archives.unshift({
+          id: 'arch-' + Date.now(),
+          date,
+          place,
+          distanceKm,
+          attendees,
+          restaurant,
+          review
+        });
+
+        e.target.reset();
+        archiveFormContainer.classList.add('hidden');
+        showToast(`'${place}' 트래킹 기록이 아카이브와 출석 통계에 반영되었습니다!`);
+        saveAppState();
+      });
+
+      // Delete Archive Item
+      document.getElementById('archiveTimelineList').addEventListener('click', (e) => {
+        const delBtn = e.target.closest('[data-delete-archive]');
+        if (!delBtn) return;
+        const archId = delBtn.getAttribute('data-delete-archive');
+        appState.archives = appState.archives.filter(a => a.id !== archId);
+        showToast('트래킹 기록이 삭제되었습니다.');
+        saveAppState();
+      });
+
+      // Edit 7 Member Names Form
+      document.getElementById('memberNamesEditForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        appState.members.forEach(m => {
+          const nameInput = document.querySelector(`[data-edit-member-name="${m.id}"]`);
+          const roleInput = document.querySelector(`[data-edit-member-role="${m.id}"]`);
+          if (nameInput && nameInput.value.trim()) {
+            m.name = nameInput.value.trim();
+          }
+          if (roleInput) {
+            m.role = roleInput.value.trim();
+          }
+        });
+        showToast('7인 멤버 프로필 이름이 모두 저장되었습니다!');
+        saveAppState();
+      });
+
+      // Reset Sample Data Confirmation Modal
+      const resetModal = document.getElementById('resetConfirmModal');
+      document.getElementById('openResetModalBtn').addEventListener('click', () => {
+        resetModal.classList.remove('hidden');
+      });
+      document.getElementById('cancelResetBtn').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+      });
+      document.getElementById('confirmResetBtn').addEventListener('click', () => {
+        appState = createDefaultState();
+        resetModal.classList.add('hidden');
+        showToast('초기 샘플 데이터로 복원되었습니다.');
+        saveAppState();
+      });
+    }
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+      setupEventListeners();
+      initCloudSync();
+    });
+  </script>
+</body>
+</html>
